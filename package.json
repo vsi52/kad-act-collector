@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "description": "Chrome extension for collecting and locally extracting judicial acts from kad.arbitr.ru",
+  "author": "Sergei I Vybornov",
   "scripts": {
     "clean": "rm -rf dist",
     "build": "node build.mjs",
