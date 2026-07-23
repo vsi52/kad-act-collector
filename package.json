@@ -1,0 +1,19 @@
+{
+  "name": "kad-act-collector",
+  "version": "0.1.20",
+  "type": "module",
+  "private": true,
+  "description": "Chrome extension for collecting and locally extracting judicial acts from kad.arbitr.ru",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "node build.mjs",
+    "package": "npm run build && node package.mjs",
+    "check": "node tests.mjs"
+  },
+  "dependencies": {
+    "pdfjs-dist": "5.4.149"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.8"
+  }
+}

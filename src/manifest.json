@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Сборщик судебных актов для kad.arbitr.ru",
+  "short_name": "Судебные акты",
+  "version": "0.1.20",
+  "description": "Собирает документы из открытого пользователем дела на kad.arbitr.ru, скачивает PDF или формирует единый TXT локально.",
+  "minimum_chrome_version": "120",
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://kad.arbitr.ru/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Собрать документы из открытого дела",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://kad.arbitr.ru/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["pdf.worker.min.mjs"],
+      "matches": ["https://kad.arbitr.ru/*"]
+    }
+  ]
+}

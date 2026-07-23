@@ -1,0 +1,38 @@
+#kad-act-collector-launcher {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: calc(120px + env(safe-area-inset-bottom));
+  z-index: 2147483647;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: calc(100vw - 36px);
+  min-height: 44px;
+  padding: 11px 16px;
+  border: 1px solid rgba(255, 255, 255, .24);
+  border-radius: 999px;
+  color: #fff;
+  background: #173d68;
+  box-shadow: 0 8px 26px rgba(15, 35, 60, .3);
+  font: 600 14px/1.2 Arial, sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+#kad-act-collector-launcher:hover { background: #0e2f54; box-shadow: 0 10px 30px rgba(15, 35, 60, .36); transform: translateY(-1px); }
+#kad-act-collector-launcher:focus-visible { outline: 3px solid #f3b33d; outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  #kad-act-collector-launcher {
+    right: max(12px, env(safe-area-inset-right));
+    max-width: calc(100vw - 24px);
+    padding: 10px 13px;
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #kad-act-collector-launcher { transition: none; }
+}

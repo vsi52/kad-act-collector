@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сторонние компоненты — Сборщик судебных актов</title>
+  <style>
+    :root{color-scheme:light;--ink:#172438;--muted:#596b80;--line:#d8e0e8;--navy:#173d68;--wash:#f3f6f9}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--wash);font:16px/1.65 Inter,"Segoe UI",Arial,sans-serif}
+    main{width:min(820px,calc(100% - 28px));margin:28px auto;padding:34px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 8px 28px rgba(35,57,82,.06)}
+    h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500}h1{margin:0 0 8px;font-size:clamp(30px,5vw,42px);line-height:1.15}h2{margin:32px 0 9px;font-size:23px}
+    p,li{max-width:74ch}.meta{margin:0;color:var(--muted);font-size:14px}.summary{margin:24px 0;padding:16px 18px;border-left:4px solid var(--navy);background:#f5f8fb}
+    code{padding:2px 5px;border-radius:4px;background:#eef2f6}a{color:var(--navy);text-underline-offset:3px}li+li{margin-top:6px}
+    footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+    @media(max-width:600px){main{margin:0;width:100%;padding:24px 18px;border:0;border-radius:0;box-shadow:none}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Сторонние компоненты</h1>
+  <p class="meta">Расширение «Сборщик судебных актов для kad.arbitr.ru»</p>
+
+  <div class="summary">
+    Установочная сборка использует PDF.js для локального извлечения текстового слоя из выбранных пользователем PDF.
+  </div>
+
+  <h2>PDF.js</h2>
+  <ul>
+    <li>Пакет: <code>pdfjs-dist</code></li>
+    <li>Версия: <code>5.4.149</code></li>
+    <li>Проект: <a href="https://github.com/mozilla/pdf.js" target="_blank" rel="noopener">github.com/mozilla/pdf.js</a></li>
+    <li>Лицензия: Apache License 2.0</li>
+    <li>Назначение: локальное извлечение текстового слоя из выбранных пользователем PDF.</li>
+  </ul>
+  <p>Полный текст лицензии включён в установочную сборку как <a href="PDFJS_LICENSE.txt" target="_blank" rel="noopener"><code>PDFJS_LICENSE.txt</code></a>.</p>
+
+  <h2>Инструменты сборки</h2>
+  <p>Исходный проект собирается с помощью <code>esbuild</code> версии <code>0.25.8</code>, распространяемого по лицензии MIT. <code>esbuild</code> не включается в исполняемую установочную сборку расширения.</p>
+
+  <footer>
+    Собственный код проекта распространяется по условиям файла <a href="LICENSE" target="_blank" rel="noopener"><code>LICENSE</code></a>.
+  </footer>
+</main>
+</body>
+</html>

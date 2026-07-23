@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сборщик судебных актов для kad.arbitr.ru</title>
+  <link rel="stylesheet" href="workspace.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="mark" aria-hidden="true">АКТЫ</div>
+      <div>
+        <p class="eyebrow">Локальная обработка</p>
+        <h1>Сборщик судебных актов</h1>
+        <p class="lede">Независимое расширение для открытого пользователем дела на kad.arbitr.ru. Документы и извлечённый текст не отправляются разработчику.</p>
+      </div>
+      <span class="version">v0.1.20</span>
+    </header>
+
+    <section id="fatal" class="notice notice-error hidden" role="alert"></section>
+
+    <section class="card case-card">
+      <div class="case-info">
+        <span class="label">Дело</span>
+        <strong id="case-number">Не собрано</strong>
+        <span id="case-meta" class="case-meta muted">Список документов ещё не собран</span>
+        <span id="case-id" class="visually-hidden"></span>
+      </div>
+      <button id="collect" class="button button-primary">Собрать список</button>
+    </section>
+
+    <section class="card workflow-card" aria-label="Настройки и результат">
+      <div class="workflow-settings">
+        <div class="settings-group scope-group">
+          <div class="section-title">
+            <span class="step" aria-hidden="true">1</span>
+            <div><span class="label">Какие документы</span><strong>Выберите состав выгрузки</strong></div>
+          </div>
+          <div class="field wide">
+            <div class="segmented" role="radiogroup" aria-label="Тип документов">
+              <label><input type="radio" name="scope" value="determinations" checked><span><span class="segment-text">Только определения</span><b id="determination-count">—</b></span></label>
+              <label><input type="radio" name="scope" value="all"><span><span class="segment-text">Все документы</span><b id="all-count">—</b></span></label>
+            </div>
+          </div>
+        </div>
+        <div class="settings-group parameters-group">
+          <div class="section-title">
+            <span class="step" aria-hidden="true">2</span>
+            <div><span class="label">Параметры</span><strong>Порядок и темп обработки</strong></div>
+          </div>
+          <div class="parameters">
+            <label class="field">
+              <span class="label">Порядок документов</span>
+              <select id="order">
+                <option value="asc">От старых к новым</option>
+                <option value="desc">От новых к старым</option>
+              </select>
+            </label>
+            <div class="field">
+              <span class="label">Темп скачивания</span>
+              <div class="rate-mode">
+                <strong>Случайно 8–15 сек.</strong>
+                <small>Пауза 1–2 мин. после 15–20 PDF</small>
+                <span id="estimate" class="rate-estimate">Оценка: —</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="workflow-result" aria-labelledby="result-title">
+        <div class="section-title result-title">
+          <span class="step" aria-hidden="true">3</span>
+          <div><span class="label">Результат</span><strong id="result-title">Выберите один из двух вариантов</strong></div>
+        </div>
+        <div class="actions">
+          <button id="download-pdfs" class="action-card" disabled>
+            <span class="action-icon" aria-hidden="true">PDF</span>
+            <span><strong id="download-label">Скачать PDF</strong><small id="download-help">Оригиналы в отдельной папке дела</small></span>
+          </button>
+          <button id="create-text" class="action-card" disabled>
+            <span class="action-icon text-icon" aria-hidden="true">TXT</span>
+            <span><strong id="text-label">Создать TXT</strong><small id="text-help">Единый файл из уже скачанных PDF</small></span>
+          </button>
+        </div>
+        <div class="pdf-settings-hint">
+          <span>PDF должны скачиваться, а не открываться в браузере.</span>
+          <button id="open-pdf-settings-inline" class="link-button" type="button">Настройки PDF в Chrome</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="progress-card" class="status-panel" data-tone="idle" aria-live="polite">
+      <div class="status-line">
+        <span class="status-dot" aria-hidden="true"></span>
+        <strong id="status">Список ещё не собран</strong>
+        <strong id="counter" class="status-counter hidden"></strong>
+      </div>
+      <div id="progress-details" class="status-details hidden">
+        <div id="progress-track" class="progress-track hidden" role="progressbar" aria-label="Прогресс" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress" class="progress-bar"></div></div>
+        <p id="current" class="current muted">Сначала соберите список документов.</p>
+        <div id="operation-controls" class="controls hidden">
+          <button id="pause" class="button" disabled>Пауза</button>
+          <button id="stop" class="button button-danger" disabled>Остановить</button>
+          <span id="stats" class="muted hidden">Обработано: 0 из 0 · Ошибок: 0</span>
+        </div>
+      </div>
+    </section>
+
+    <details id="log-card" class="log-row">
+      <summary><span>Журнал операций · <span id="log-count">0 записей</span></span><span id="log-last" class="log-last muted">Событий пока нет</span></summary>
+      <pre id="log"></pre>
+    </details>
+
+    <p class="footnote"><strong>Техническая справка:</strong> TXT создаётся локально из скачанных PDF. При странице защиты очередь останавливается без повторов; для сканов потребуется OCR.</p>
+    <footer class="legal-footer">
+      <p><strong>Независимый продукт.</strong> Расширение не является официальным продуктом kad.arbitr.ru, PravoTech, арбитражных судов или государственных органов и не связано с ними.</p>
+      <nav aria-label="Юридическая информация">
+        <a href="terms.html" target="_blank" rel="noopener">Пользовательское соглашение</a>
+        <a href="privacy.html" target="_blank" rel="noopener">Политика конфиденциальности</a>
+        <a href="third-party.html" target="_blank" rel="noopener">Компоненты</a>
+      </nav>
+    </footer>
+  </main>
+
+  <dialog id="legal-consent-dialog" class="setup-dialog legal-consent-dialog" aria-labelledby="legal-consent-title">
+    <div class="setup-dialog-body">
+      <span class="setup-dialog-icon legal-icon" aria-hidden="true">§</span>
+      <div>
+        <span class="label">Перед началом работы</span>
+        <h2 id="legal-consent-title">Условия использования и обработка данных</h2>
+        <p>Расширение получает номер дела, метаданные и выбранные PDF с <strong>kad.arbitr.ru</strong> только для сбора и локальной обработки по вашей команде. Разработчик не получает документы, извлечённый текст или историю дел.</p>
+        <p>Расширение независимо от kad.arbitr.ru, PravoTech и судебных органов. Оно предназначено для работы с открытым вами делом, не обходит блокировки и не предназначено для массового копирования базы.</p>
+        <p>Вы отвечаете за законность доступа, обработки и дальнейшего использования документов, включая персональные данные и материалы участников дела.</p>
+        <label class="consent-check">
+          <input id="legal-consent-check" type="checkbox">
+          <span>Я прочитал(а) и принимаю <a href="terms.html" target="_blank" rel="noopener">Пользовательское соглашение</a> и <a href="privacy.html" target="_blank" rel="noopener">Политику конфиденциальности</a>.</span>
+        </label>
+        <p id="legal-consent-error" class="notice-inline hidden" role="alert"></p>
+      </div>
+    </div>
+    <div class="setup-dialog-actions">
+      <button id="legal-decline" class="button" type="button">Отказаться и закрыть</button>
+      <button id="legal-accept" class="button button-primary" type="button" disabled>Принять и продолжить</button>
+    </div>
+  </dialog>
+
+  <dialog id="pdf-setup-dialog" class="setup-dialog" aria-labelledby="pdf-setup-title">
+    <div class="setup-dialog-body">
+      <span class="setup-dialog-icon" aria-hidden="true">PDF</span>
+      <div>
+        <span class="label">Перед первой загрузкой</span>
+        <h2 id="pdf-setup-title">Проверьте настройку PDF в Chrome</h2>
+        <p>Для стабильной работы включите <strong>скачивание PDF</strong>, а не открытие PDF в браузере.</p>
+        <p class="muted">Если Chrome запросит разрешение на скачивание нескольких файлов, подтвердите его. При ошибке не удаляйте расширение и не очищайте журнал — он поможет службе поддержки найти причину.</p>
+      </div>
+    </div>
+    <div class="setup-dialog-actions">
+      <button id="open-pdf-settings" class="button button-primary" type="button">Открыть настройки PDF</button>
+      <button id="pdf-setup-done" class="button" type="button">Понятно</button>
+    </div>
+  </dialog>
+  <script src="workspace.js"></script>
+</body>
+</html>

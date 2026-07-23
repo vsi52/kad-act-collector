@@ -1,0 +1,31 @@
+name: Проверка
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить исходники
+        uses: actions/checkout@v4
+
+      - name: Подготовить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Собрать расширение
+        run: npm run build
+
+      - name: Запустить проверки
+        run: npm run check

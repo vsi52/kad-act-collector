@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
+*.log
+*.crx
+release/KAD_Act_Collector_source_v*.zip
+release/KAD_Act_Collector_v*.zip
+!release/KAD_Act_Collector_v0.1.20.zip
