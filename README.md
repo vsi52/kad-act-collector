@@ -33,7 +33,7 @@
 
 ## Быстрая установка
 
-1. Скачайте [`KAD_Act_Collector_v0.1.20.zip`]([https://github.com/vsi52/kad-act-collector/releases/download/v0.1.20/KAD_Act_Collector_v0.1.20.zip]).
+1. Скачайте [`KAD_Act_Collector_v0.1.20.zip`](https://github.com/vsi52/kad-act-collector/releases/download/v0.1.20/KAD_Act_Collector_v0.1.20.zip).
 2. Распакуйте архив в отдельную папку.
 3. Откройте в Chrome страницу `chrome://extensions`.
 4. Включите **Режим разработчика**.
